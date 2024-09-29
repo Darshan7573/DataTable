@@ -7,15 +7,17 @@ const App = () => {
   const [filteredData, setFilteredData] = useState([sampleData])
   const [nameFilter, setNameFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [subcategoryFilter, setSubCategoryFilter] = useState('')
   const [priceRange, setPriceRange] = useState([0, 100]);
 
   const handleFilter = () => {
     const filtered = sampleData.filter(item => {
       const matchesName = nameFilter === '' || item.name.toLowerCase().includes(nameFilter.toLowerCase());
       const matchesCategory = categoryFilter === '' || item.category.toLowerCase().includes(categoryFilter.toLowerCase());
+      const matchesSubCategory = subcategoryFilter === "" || item.subcategory.toLowerCase().includes(subcategoryFilter.toLocaleLowerCase())
       const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
 
-      return matchesName && matchesCategory && matchesPrice;
+      return matchesName && matchesCategory && matchesPrice && matchesSubCategory;
     });
 
     setFilteredData(filtered.length > 0 ? filtered : []);
@@ -25,29 +27,42 @@ const App = () => {
     setCategoryFilter('');
     setPriceRange([0, 100]);
     setFilteredData(sampleData);
+    setSubCategoryFilter('')
   };
 
   useEffect(() => {
-    setFilteredData(sampleData); // Ensure sampleData is set initially
+    setFilteredData(sampleData);
   }, []);
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      <div className="w-1/3 p-6 bg-white shadow-lg rounded-lg">
+      <div className="w-1/4 p-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-lg font-bold mb-4">Filters</h2>
+        <div>
+          <input
+            type="text"
+            value={nameFilter}
+            onChange={(e) => setNameFilter(e.target.value)}
+            placeholder="Filter by Name"
+            required
+            className="border p-2 mb-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+
+          <input
+            type="text"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            placeholder="Filter by Category"
+            required
+            className="border p-2 mb-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
         <input
           type="text"
-          value={nameFilter}
-          onChange={(e) => setNameFilter(e.target.value)}
-          placeholder="Filter by Name"
-          required
-          className="border p-2 mb-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <input
-          type="text"
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          placeholder="Filter by Category"
+          value={subcategoryFilter}
+          onChange={(e) => setSubCategoryFilter(e.target.value)}
+          placeholder="Filter by SubCategory"
           required
           className="border p-2 mb-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
